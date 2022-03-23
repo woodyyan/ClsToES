@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import os
-import json
 import datetime
-import time
+import gzip
+import json
 import logging
+import os
+from io import StringIO
+
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 
 # 必填参数
 ES_Address = os.getenv('ES_Address')
-ES_User = os.getenv('ES_User')
-ES_Password = os.getenv('ES_Password')
+ES_Api_Key = os.getenv('ES_API_KEY')
 
 # 按照天或者小时设置Index，默认按照天建立索引，如填day, hour
 ES_Index_TimeFormat = "day"
@@ -28,7 +29,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)  # 日志等级
 
 # 构建es客户端
-es = Elasticsearch([ES_Address], http_auth=(ES_User, ES_Password))
+es = Elasticsearch([ES_Address], api_key=ES_Api_Key)
 
 
 # 自定义es索引
@@ -55,51 +56,42 @@ def cleanData(data):
         raise
 
 
-# 处理ckafka数据
-def dealWithData(record):
-    try:
-        # 这里默认把msgBody直接存入Es，可以根据需求自定义解析
-        msg_body = record['Ckafka']['msgBody']
+# 处理cls数据
+def deal_with_data(content):
+    # 自定义index
+    index_name = createIndex(ES_Index_KeyWord, ES_Index_TimeFormat)
 
-        # 自定义index
-        index_name = createIndex(ES_Index_KeyWord, ES_Index_TimeFormat)
+    # 清洗功能
+    # content = cleanData(content)
 
-        # 清洗功能
-        msg_body = cleanData(msg_body)
+    # 这里可以自定义增加需要上传es的信息
+    data = {
+        "_index": index_name,
+        "content": content,
+        "doc_as_upsert": True
+    }
 
-        # 这里可以自定义增加需要上传es的信息
-        data = {
-            "_index": index_name,
-            "msg_body": msg_body,
-            "doc_as_upsert": True
-        }
-
-        yield data
-    except:
-        logger.error("Error occured when dealing data")
-        raise
+    return data
 
 
 # 写入es
-def writeDataToEs(records):
-    for record in records:
-        # 处理数据再写入
-        data = dealWithData(record)
+def write_data_to_es(data):
+    # 处理数据再写入
+    data = deal_with_data(data)
 
-        # 写入es
-        try:
-            bulk(es, data)
-        except:
-            logger.error("Error occured when writing to es")
-            raise
+    # 写入es
+    try:
+        bulk(es, data)
+    except Exception as e:
+        logger.error("Error occurred when writing to es", e)
+        raise
 
 
 def main_handler(event, context):
     logger.debug("start main_handler")
-    # ckafka消息的数量
-    num = len(event['Records'])
-    logger.debug("the length of msg body is [%s]" % num)
-    logger.debug("start writing to es")
-    writeDataToEs(event['Records'])
+    event = json.loads(gzip.GzipFile(fileobj=StringIO(event['clslogs']['data'].decode('base64'))).read())
+    data = json.dumps(event, indent=4, sort_keys=True)
+    print(data)
+    write_data_to_es(data)
 
     return 'success'
