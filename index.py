@@ -67,7 +67,7 @@ def deal_with_data(content):
 
     # 这里可以自定义增加需要上传es的信息
     data = {
-        "_index": index_name,
+        # "_index": index_name,
         "content": content,
         "doc_as_upsert": True
     }
