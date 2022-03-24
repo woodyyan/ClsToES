@@ -13,6 +13,8 @@ from elasticsearch.helpers import bulk
 
 # 必填参数
 ES_Address = os.getenv('ES_Address')
+ES_User = os.getenv('ES_User')
+ES_Password = os.getenv('ES_Password')
 ES_Api_Key = os.getenv('ES_API_KEY')
 
 # 按照天或者小时设置Index，默认按照天建立索引，如填day, hour
@@ -29,7 +31,8 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)  # 日志等级
 
 # 构建es客户端
-es = Elasticsearch([ES_Address], api_key=ES_Api_Key)
+# es = Elasticsearch([ES_Address], api_key=ES_Api_Key)
+es = Elasticsearch([ES_Address], http_auth=(ES_User, ES_Password))
 
 
 # 自定义es索引
