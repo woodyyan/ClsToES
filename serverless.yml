@@ -26,7 +26,7 @@ inputs:
   namespace: default
   publicAccess: true
   region: ap-chengdu
-  retryNum: 2
+  retryNum: 0
   runtime: Python3.6
   src: ./
   timeout: 3

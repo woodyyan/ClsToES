@@ -93,7 +93,10 @@ def write_data_to_es(data):
 def main_handler(event, context):
     logger.debug("start main_handler")
     logger.info(event)
-    event = json.loads(gzip.GzipFile(fileobj=StringIO(event['clslogs']['data'])).read())
+    io = StringIO(event['clslogs']['data'])
+    file = gzip.GzipFile(fileobj=io)
+    read = file.read()
+    event = json.loads(read)
     data = json.dumps(event, indent=4, sort_keys=True)
     print(data)
     write_data_to_es(data)
