@@ -9,7 +9,9 @@ inputs:
   environment:
     variables:
       ES_API_KEY: '123'
-      ES_Address: abc
+      ES_Address: 172.27.0.17:9200
+      ES_Password:
+      ES_User: elastic
   events:
     - cls:
         parameters:
@@ -29,6 +31,9 @@ inputs:
   src: ./
   timeout: 3
   type: event
+  vpcConfig:
+    subnetId: subnet-fiexq52h
+    vpcId: vpc-a6yrgos8
 name: ap-chengdu_default_ClsToES
 org: '1307427535'
 stage: dev
