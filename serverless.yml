@@ -9,9 +9,10 @@ inputs:
   environment:
     variables:
       ES_API_KEY: '123'
-      ES_Address: 172.27.0.17:9200
-      ES_Password:
-      ES_User: elastic
+      ES_ADDRESS: 172.27.0.17:9200
+      ES_PASSWORD:
+      ES_USER: elastic
+      ES_INDEX: index_test
   events:
     - cls:
         parameters:
