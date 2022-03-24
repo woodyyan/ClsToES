@@ -1,0 +1,36 @@
+app: ClsToES
+component: scf
+inputs:
+  cls:
+    logsetId: 7cb1c8d7-0a91-452f-95fe-78441855e24c
+    topicId: 2c81e19a-4d49-489f-892f-c13dcf17bab1
+  description: helloworld 空白模板函数
+  eip: false
+  environment:
+    variables:
+      ES_API_KEY: '123'
+      ES_Address: abc
+  events:
+    - cls:
+        parameters:
+          enable: true
+          qualifier: $DEFAULT
+          topicId: ce8e7dbc-4f88-4d7b-b121-b4dd8dfefbd4
+  handler: index.main_handler
+  initTimeout: 65
+  memorySize: 512
+  msgTTL: 21600
+  name: ClsToES
+  namespace: default
+  publicAccess: true
+  region: ap-chengdu
+  retryNum: 2
+  runtime: Python3.6
+  src: ./
+  timeout: 3
+  type: event
+name: ap-chengdu_default_ClsToES
+org: '1307427535'
+stage: dev
+# When using this configuration file for deployment, make sure the file name is "serverless.yml".
+# For more information: https://github.com/serverless-components/tencent-scf/blob/master/docs/configure.md
