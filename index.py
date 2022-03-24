@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
-
+import base64
 import datetime
 import gzip
-import json
 import logging
 import os
-from io import StringIO
 
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
@@ -93,11 +91,8 @@ def write_data_to_es(data):
 def main_handler(event, context):
     logger.debug("start main_handler")
     logger.info(event)
-    io = StringIO(event['clslogs']['data'])
-    file = gzip.GzipFile(fileobj=io)
-    read = file.read()
-    event = json.loads(read)
-    data = json.dumps(event, indent=4, sort_keys=True)
+    debase = base64.b64decode(event['clslogs']['data'])
+    data = gzip.decompress(debase).decode()
     print(data)
     write_data_to_es(data)
 

@@ -1,2 +1,5 @@
 .idea
 venv
+elasticsearch/__pycache__/
+elasticsearch/client/__pycache__/
+elasticsearch/connection/__pycache__/
