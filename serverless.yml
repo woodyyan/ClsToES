@@ -10,7 +10,7 @@ inputs:
     variables:
       ES_API_KEY: '123'
       ES_ADDRESS: 172.27.0.17:9200
-      ES_PASSWORD:
+      ES_PASSWORD: 123
       ES_USER: elastic
       ES_INDEX: index_test
   events:

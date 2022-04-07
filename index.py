@@ -9,23 +9,23 @@ import os
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 
-# 必填参数
+# environment variables
 ES_ADDRESS = os.getenv('ES_ADDRESS')
 ES_USER = os.getenv('ES_USER')
 ES_PASSWORD = os.getenv('ES_PASSWORD')
 ES_API_KEY = os.getenv('ES_API_KEY')
 ES_INDEX = os.getenv('ES_INDEX')
 
-# 日志设置
+# log setting
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)  # 日志等级
 
-# 构建es客户端
-# es = Elasticsearch([ES_ADDRESS], api_key=ES_API_KEY)
-es = Elasticsearch([ES_ADDRESS], http_auth=(ES_USER, ES_PASSWORD))
+# es client
+es = Elasticsearch([ES_ADDRESS], api_key=ES_API_KEY)
+# es = Elasticsearch([ES_ADDRESS], http_auth=(ES_USER, ES_PASSWORD))
 
 
-# 写入es
+# write to es
 def write_data_to_es(content):
     try:
         records = content['records']
