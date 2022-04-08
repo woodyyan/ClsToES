@@ -18,9 +18,9 @@ ES_PASSWORD = os.getenv('ES_PASSWORD')
 ES_API_KEY = os.getenv('ES_API_KEY')
 ES_INDEX = os.getenv('ES_INDEX')
 SPLUNK_TIMEOUT = os.getenv('SPLUNK_TIMEOUT')
-SPLUNK_SSL_VERIFY = os.getenv('SPLUNK_SSL_VERIFY')
+SPLUNK_SSL_VERIFY = True if os.getenv('SPLUNK_SSL_VERIFY').lower() == 'true' else False
+SPLUNK_HTTPS = True if os.getenv('SPLUNK_HTTPS').lower() == 'true' else False
 SPLUNK_TOKEN = os.getenv('SPLUNK_TOKEN')
-SPLUNK_HTTPS = os.getenv('SPLUNK_HTTPS')
 SPLUNK_HOST = os.getenv('SPLUNK_HOST')
 SPLUNK_PORT = os.getenv('SPLUNK_PORT')
 SPLUNK_SOURCETYPE = os.getenv('SPLUNK_SOURCETYPE')
