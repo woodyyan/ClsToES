@@ -33,6 +33,10 @@ logger.setLevel(logging.DEBUG)  # log level
 
 
 def write_data_to_splunk(content):
+    print(SPLUNK_HTTPS)
+    print(type(SPLUNK_HTTPS))
+    print(SPLUNK_SSL_VERIFY)
+    print(type(SPLUNK_SSL_VERIFY))
     records = content['records']
 
     default_fields = {}
