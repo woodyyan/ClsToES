@@ -13,10 +13,10 @@ inputs:
       ES_PASSWORD: 123
       ES_USER: elastic
       ES_INDEX: index_test
-      SPLUNK_TIMEOUT: 120
-      SPLUNK_SSL_VERIFY: True
+      SPLUNK_TIMEOUT: 20
+      SPLUNK_SSL_VERIFY: False
       SPLUNK_TOKEN: abc
-      SPLUNK_HTTPS: True
+      SPLUNK_HTTPS: False
       SPLUNK_HOST: xxx.com
       SPLUNK_PORT: 8000
       SPLUNK_SOURCETYPE: sourcetype

@@ -29,7 +29,7 @@ SPLUNK_INDEX = os.getenv('SPLUNK_INDEX')
 
 # log setting
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)  # 日志等级
+logger.setLevel(logging.DEBUG)  # log level
 
 
 def write_data_to_splunk(content):
@@ -51,22 +51,21 @@ def write_data_to_splunk(content):
                                                           SPLUNK_PORT)
     timeout = SPLUNK_TIMEOUT if SPLUNK_TIMEOUT else 120
     logger.info("Log count: %s" % len(records))
-    for record in records:
-        # Send data to Splunk
-        event = {}
-        event.update(default_fields)
-        event['event'] = json.dumps(record)
-        data = json.dumps(event, sort_keys=True)
-        try:
+    try:
+        for record in records:
+            # Send data to Splunk
+            event = {}
+            event.update(default_fields)
+            event['event'] = json.dumps(record)
+            data = json.dumps(event, sort_keys=True)
+
             res = r.post(url, data=data, timeout=timeout)
             logger.info("Response status: {}, content: {}".format(res.status_code, res.content))
             res.raise_for_status()
-
-        except Exception as err:
-            logger.debug("Failed to connect to remote Splunk server ({0}). Exception: {1}", url, err)
-
-            # 根据需要，添加一些重试或者报告。
-
+    except Exception as err:
+        logger.error("Failed to connect to remote Splunk server ({0}). Exception: {1}", url, err)
+        raise
+        # if need, retry or report
     logger.info("Complete send data to splunk")
 
 
@@ -74,8 +73,8 @@ def write_data_to_splunk(content):
 def write_data_to_es(content):
     try:
         # es client
-        es = Elasticsearch([ES_ADDRESS], api_key=ES_API_KEY)
-        # es = Elasticsearch([ES_ADDRESS], http_auth=(ES_USER, ES_PASSWORD))
+        # es = Elasticsearch([ES_ADDRESS], api_key=ES_API_KEY)
+        es = Elasticsearch([ES_ADDRESS], http_auth=(ES_USER, ES_PASSWORD))
         records = content['records']
         actions = []
         for record in records:
